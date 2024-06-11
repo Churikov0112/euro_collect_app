@@ -133,6 +133,7 @@ class StickerPackScreenState extends State<StickerPackScreen> with SingleTickerP
                   child: Dismissible(
                     key: Key(i.toString()),
                     onDismissed: (direction) {
+                      // playersRepository.savePlayer(players[i]);
                       _removeCard(i);
                     },
                     child: cardsList[i],

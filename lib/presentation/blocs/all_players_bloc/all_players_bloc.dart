@@ -1,5 +1,5 @@
 import 'package:euro_collect_app/data/repository.dart';
-import 'package:euro_collect_app/domain/models/player.dart';
+import 'package:euro_collect_app/domain/models/player/player.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 part 'all_players_event.dart';

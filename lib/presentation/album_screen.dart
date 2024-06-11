@@ -1,4 +1,4 @@
-import 'package:euro_collect_app/domain/models/player.dart';
+import 'package:euro_collect_app/domain/models/player/player.dart';
 import 'package:euro_collect_app/presentation/blocs/all_players_bloc/all_players_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

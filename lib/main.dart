@@ -1,6 +1,7 @@
 import 'package:euro_collect_app/presentation/blocs/all_players_bloc/all_players_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:yandex_mobileads/mobile_ads.dart';
 
 import 'data/repository.dart';
@@ -8,8 +9,9 @@ import 'presentation/album_screen.dart';
 
 final playersRepository = PlayersRepository();
 
-void main() {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Hive.initFlutter();
   runApp(const MyApp());
 }
 
