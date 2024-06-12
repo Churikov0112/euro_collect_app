@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <uses-permission android:name="android.permission.INTERNET" />
     <application
-        android:label="euro_collect_app"
+        android:label="Euro Pack Collection"
         android:name="${applicationName}"
         android:icon="@mipmap/launcher_icon">
         <activity
