@@ -211,10 +211,8 @@ class StickerPackScreenState extends State<StickerPackScreen> with SingleTickerP
                     AnimatedBuilder(
                       animation: _rotateAnimation,
                       builder: (context, child) => Transform(
-                        transform: Matrix4.identity()
-                          ..rotateZ(_rotateAnimation.value * -1 * math.pi * 0.1), // Вращаем на 90 градусов
-
-                        origin: const Offset(1.0, 1.0), // Правая нижняя точка
+                        transform: Matrix4.identity()..rotateZ(_rotateAnimation.value * -1 * math.pi * 0.03),
+                        origin: const Offset(1.0, 1.0),
                         child: Container(
                           width: 200,
                           height: 10,
