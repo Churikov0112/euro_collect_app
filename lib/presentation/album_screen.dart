@@ -75,7 +75,10 @@ class _AlbumScreenState extends State<AlbumScreen> {
               if (allPlayersState is AllPlayersStateLoadSucceeded) {
                 return RefreshIndicator(
                   onRefresh: () async {
-                    context.read<SavedPlayersBloc>().add(SavedPlayersEventLoad());
+                    Future.delayed(const Duration(milliseconds: 500)).whenComplete(() {
+                      context.read<AllPlayersBloc>().add(AllPlayersEventLoad());
+                      context.read<SavedPlayersBloc>().add(SavedPlayersEventLoad());
+                    });
                   },
                   child: GridView.builder(
                     gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(

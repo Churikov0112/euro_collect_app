@@ -316,7 +316,10 @@ class PlayerPackCardWidget extends StatelessWidget {
     return Container(
       height: 300,
       width: 200,
-      decoration: BoxDecoration(border: Border.all()),
+      decoration: BoxDecoration(
+        border: Border.all(),
+        color: Colors.white,
+      ),
       child: Stack(
         children: [
           Positioned.fill(
