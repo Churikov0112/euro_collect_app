@@ -21,48 +21,6 @@ class StickerPackScreenState extends State<StickerPackScreen> with SingleTickerP
 
   List<PlayerModel> packPlayers = [];
   final List<Widget> packPlayerCards = [];
-  // [
-  //   Container(
-  //     width: 300,
-  //     height: 300,
-  //     decoration: BoxDecoration(
-  //       color: const Color.fromARGB(255, 28, 23, 23),
-  //       borderRadius: BorderRadius.circular(20),
-  //     ),
-  //   ),
-  //   Container(
-  //     width: 300,
-  //     height: 300,
-  //     decoration: BoxDecoration(
-  //       color: const Color.fromARGB(255, 144, 56, 56),
-  //       borderRadius: BorderRadius.circular(20),
-  //     ),
-  //   ),
-  //   Container(
-  //     width: 300,
-  //     height: 300,
-  //     decoration: BoxDecoration(
-  //       color: const Color.fromARGB(255, 26, 162, 135),
-  //       borderRadius: BorderRadius.circular(20),
-  //     ),
-  //   ),
-  //   Container(
-  //     width: 300,
-  //     height: 300,
-  //     decoration: BoxDecoration(
-  //       color: const Color.fromARGB(255, 1, 255, 1),
-  //       borderRadius: BorderRadius.circular(20),
-  //     ),
-  //   ),
-  //   Container(
-  //     width: 300,
-  //     height: 300,
-  //     decoration: BoxDecoration(
-  //       color: const Color.fromARGB(255, 222, 18, 130),
-  //       borderRadius: BorderRadius.circular(20),
-  //     ),
-  //   ),
-  // ];
 
   @override
   void initState() {
