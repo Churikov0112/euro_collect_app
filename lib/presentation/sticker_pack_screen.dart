@@ -178,6 +178,7 @@ class StickerPackScreenState extends State<StickerPackScreen> with SingleTickerP
   Widget build(BuildContext context) {
     final mq = MediaQuery.of(context);
     return Scaffold(
+      backgroundColor: const Color.fromARGB(255, 35, 43, 56),
       body: Stack(
         children: [
           if (_showCards)
