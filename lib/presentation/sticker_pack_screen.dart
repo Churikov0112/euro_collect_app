@@ -3,7 +3,9 @@ import 'dart:math' as math;
 import 'package:euro_collect_app/domain/models/player/player.dart';
 import 'package:euro_collect_app/main.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_image/network.dart';
+import 'package:yandex_mobileads/mobile_ads.dart';
 
 class StickerPackScreen extends StatefulWidget {
   const StickerPackScreen({super.key});
@@ -55,7 +57,89 @@ class StickerPackScreenState extends State<StickerPackScreen> with SingleTickerP
       packPlayerCards.add(PlayerPackCardWidget(player: packPlayer));
     }
     setState(() {});
+
+    SchedulerBinding.instance.addPostFrameCallback((_) async {
+      _loadAd();
+      _adLoader = _createRewardedAdLoader();
+      await _loadRewardedAd();
+    });
   }
+
+  // ! ads start ----------------------------------------------------------------
+
+  late BannerAd banner;
+  var isBannerAlreadyCreated = false;
+  late final Future<RewardedAdLoader> _adLoader;
+  RewardedAd? _ad;
+
+  BannerAdSize _getBannerAdSize() {
+    final width = MediaQuery.of(context).size.width.round();
+    return BannerAdSize.sticky(width: width);
+  }
+
+  BannerAd _createBanner() {
+    return BannerAd(
+      adUnitId: "R-M-9326097-2", // "demo-banner-yandex",
+      adSize: _getBannerAdSize(),
+      adRequest: const AdRequest(),
+      onAdLoaded: () {
+        if (!mounted) {
+          banner.destroy();
+          return;
+        }
+      },
+    );
+  }
+
+  void _loadAd() async {
+    banner = _createBanner();
+    setState(() {
+      isBannerAlreadyCreated = true;
+    });
+  }
+
+  Future<RewardedAdLoader> _createRewardedAdLoader() {
+    return RewardedAdLoader.create(
+      onAdLoaded: (rewardedAd) {
+        _ad = rewardedAd;
+      },
+    );
+  }
+
+  Future<void> _loadRewardedAd() async {
+    final adLoader = await _adLoader;
+    await adLoader.loadAd(
+      adRequestConfiguration: const AdRequestConfiguration(
+        adUnitId: 'demo-rewarded-yandex', // 'R-M-9326097-3', // ,
+      ),
+    );
+  }
+
+  Future<void> _showRewardedAd() async {
+    _ad?.setAdEventListener(
+      eventListener: RewardedAdEventListener(
+        onAdFailedToShow: (error) {
+          _ad?.destroy();
+          _ad = null;
+          _loadRewardedAd();
+        },
+        onAdDismissed: () {
+          _ad?.destroy();
+          _ad = null;
+          _loadRewardedAd();
+        },
+        onRewarded: (reward) {},
+      ),
+    );
+
+    await _ad?.show();
+    final reward = await _ad?.waitForDismiss();
+    if (reward != null) {
+      _openPack();
+    }
+  }
+
+  // ! ads end ---------------------------------------------------------------
 
   @override
   void dispose() {
@@ -138,7 +222,7 @@ class StickerPackScreenState extends State<StickerPackScreen> with SingleTickerP
                       ),
                     ),
                     GestureDetector(
-                      onTap: _showCards ? _closePack : _openPack,
+                      onTap: _showCards ? _closePack : _showRewardedAd,
                       child: Container(
                         height: 300,
                         width: 200,
@@ -150,6 +234,11 @@ class StickerPackScreenState extends State<StickerPackScreen> with SingleTickerP
               ),
             ),
           ),
+          if (isBannerAlreadyCreated)
+            Positioned(
+              bottom: 0,
+              child: AdWidget(bannerAd: banner),
+            ),
         ],
       ),
     );
