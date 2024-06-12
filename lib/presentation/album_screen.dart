@@ -23,16 +23,19 @@ class _AlbumScreenState extends State<AlbumScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final mq = MediaQuery.of(context);
+    // final mq = MediaQuery.of(context);
 
     return Scaffold(
       appBar: AppBar(title: const Text("Album")),
+      // floatingActionButton: FloatingActionButton(
+      //   onPressed: () {},
+      //   child: const Icon(Icons.refresh),
+      // ),
       body: BlocBuilder<AllPlayersBloc, AllPlayersState>(
         builder: (context, allPlayersState) {
           if (allPlayersState is AllPlayersStateLoadSucceeded) {
             return RefreshIndicator(
               onRefresh: () async {
-                await Future.delayed(const Duration(milliseconds: 500));
                 context.read<SavedPlayersBloc>().add(SavedPlayersEventLoad());
               },
               child: GridView.builder(

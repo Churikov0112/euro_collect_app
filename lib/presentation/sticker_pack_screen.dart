@@ -82,7 +82,11 @@ class StickerPackScreenState extends State<StickerPackScreen> with SingleTickerP
     setState(() {
       _showCards = false;
     });
-    _controller.reverse();
+    _controller.reverse().whenComplete(() {
+      if (Navigator.of(context).canPop()) {
+        Navigator.of(context).pop();
+      }
+    });
   }
 
   @override
