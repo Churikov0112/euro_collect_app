@@ -137,11 +137,17 @@ class PlayerCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final absentWIdget = GestureDetector(
       onTap: () {
-        Navigator.of(context).push(
+        Navigator.of(context)
+            .push(
           MaterialPageRoute<void>(
             builder: (BuildContext context) => const StickerPackScreen(),
           ),
-        );
+        )
+            .whenComplete(() {
+          print("update");
+          context.read<AllPlayersBloc>().add(AllPlayersEventLoad());
+          context.read<SavedPlayersBloc>().add(SavedPlayersEventLoad());
+        });
       },
       child: Container(
         color: Colors.grey[300],

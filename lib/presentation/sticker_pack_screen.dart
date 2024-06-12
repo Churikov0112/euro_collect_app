@@ -137,6 +137,9 @@ class StickerPackScreenState extends State<StickerPackScreen> with SingleTickerP
     final reward = await _ad?.waitForDismiss();
     if (reward != null) {
       _openPack();
+      for (var item in packPlayers) {
+        await playersRepository.savePlayer(item);
+      }
     }
   }
 
@@ -153,7 +156,7 @@ class StickerPackScreenState extends State<StickerPackScreen> with SingleTickerP
     setState(() {
       _showCards = true;
     });
-    _controller.forward().whenComplete(() {});
+    _controller.forward();
   }
 
   void _removeCard(int i) {
@@ -191,16 +194,20 @@ class StickerPackScreenState extends State<StickerPackScreen> with SingleTickerP
                   child: SizedBox(
                     width: mq.size.width,
                     child: Center(
-                      child: SizedBox(
-                        width: 200,
-                        child: Dismissible(
-                          key: UniqueKey(),
-                          onDismissed: (direction) {
-                            playersRepository.savePlayer(packPlayers[i]);
-                            _removeCard(i);
-                          },
-                          child: packPlayerCards[i],
-                        ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          SizedBox(
+                            width: 200,
+                            child: Dismissible(
+                              key: UniqueKey(),
+                              onDismissed: (direction) {
+                                _removeCard(i);
+                              },
+                              child: packPlayerCards[i],
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ),
