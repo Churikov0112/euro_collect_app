@@ -1,4 +1,5 @@
 import 'package:euro_collect_app/presentation/blocs/all_players_bloc/all_players_bloc.dart';
+import 'package:euro_collect_app/presentation/blocs/saved_players_bloc/saved_players_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -36,12 +37,11 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Sticker Pack Animation',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
+      theme: ThemeData(primarySwatch: Colors.blue),
       home: MultiBlocProvider(
         providers: [
           BlocProvider(create: (context) => AllPlayersBloc(repository: playersRepository)),
+          BlocProvider(create: (context) => SavedPlayersBloc(repository: playersRepository)),
         ],
         child: const AlbumScreen(),
       ),

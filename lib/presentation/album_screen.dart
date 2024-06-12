@@ -1,8 +1,8 @@
 import 'package:euro_collect_app/domain/models/player/player.dart';
 import 'package:euro_collect_app/presentation/blocs/all_players_bloc/all_players_bloc.dart';
+import 'package:euro_collect_app/presentation/blocs/saved_players_bloc/saved_players_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_image/network.dart';
 
 import 'sticker_pack_screen.dart';
 
@@ -17,6 +17,7 @@ class _AlbumScreenState extends State<AlbumScreen> {
   @override
   void initState() {
     context.read<AllPlayersBloc>().add(AllPlayersEventLoad());
+    context.read<SavedPlayersBloc>().add(SavedPlayersEventLoad());
     super.initState();
   }
 
@@ -25,48 +26,30 @@ class _AlbumScreenState extends State<AlbumScreen> {
     final mq = MediaQuery.of(context);
 
     return Scaffold(
-      // drawer: Container(
-      //   color: Colors.amber,
-      //   height: mq.size.height,
-      //   width: mq.size.width * 0.75,
-      //   child: ListTile(
-      //     onTap: () {
-      //       Navigator.of(context).push(
-      //         MaterialPageRoute<void>(
-      //           builder: (BuildContext context) => const StickerPackScreen(),
-      //         ),
-      //       );
-      //     },
-      //   ),
-      // ),
-      floatingActionButton: FloatingActionButton.large(
-        onPressed: () {
-          Navigator.of(context).push(
-            MaterialPageRoute<void>(
-              builder: (BuildContext context) => const StickerPackScreen(),
-            ),
-          );
-        },
-        child: const Text("Открыть"),
-      ),
-      appBar: AppBar(
-        title: const Text("Альбом"),
-      ),
+      appBar: AppBar(title: const Text("Album")),
       body: BlocBuilder<AllPlayersBloc, AllPlayersState>(
         builder: (context, allPlayersState) {
           if (allPlayersState is AllPlayersStateLoadSucceeded) {
-            return GridView.builder(
-              gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-                maxCrossAxisExtent: 200,
-                childAspectRatio: 2 / 3,
-                crossAxisSpacing: 20,
-                mainAxisSpacing: 20,
-              ),
-              padding: const EdgeInsets.all(20),
-              itemCount: allPlayersState.players.length,
-              itemBuilder: (context, index) {
-                return PlayerTile(player: allPlayersState.players[index]);
+            return RefreshIndicator(
+              onRefresh: () async {
+                await Future.delayed(const Duration(milliseconds: 500));
+                context.read<SavedPlayersBloc>().add(SavedPlayersEventLoad());
               },
+              child: GridView.builder(
+                gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                  maxCrossAxisExtent: 200,
+                  childAspectRatio: 2 / 3,
+                  crossAxisSpacing: 20,
+                  mainAxisSpacing: 20,
+                ),
+                padding: const EdgeInsets.all(20),
+                itemCount: allPlayersState.players.length,
+                itemBuilder: (context, index) {
+                  return PlayerCard(
+                    player: allPlayersState.players[index],
+                  );
+                },
+              ),
             );
           }
           return const Center(
@@ -78,8 +61,8 @@ class _AlbumScreenState extends State<AlbumScreen> {
   }
 }
 
-class PlayerTile extends StatelessWidget {
-  const PlayerTile({
+class PlayerCard extends StatelessWidget {
+  const PlayerCard({
     required this.player,
     super.key,
   });
@@ -88,12 +71,31 @@ class PlayerTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Colors.amber,
-      child: Image(
-        image: NetworkImageWithRetry(player.photoUrl),
-        fit: BoxFit.cover,
+    final absentWIdget = GestureDetector(
+      onTap: () {
+        Navigator.of(context).push(
+          MaterialPageRoute<void>(
+            builder: (BuildContext context) => const StickerPackScreen(),
+          ),
+        );
+      },
+      child: Container(
+        color: Colors.grey[400],
+        child: const Icon(Icons.question_mark, size: 40),
       ),
+    );
+
+    return BlocBuilder<SavedPlayersBloc, SavedPlayersState>(
+      buildWhen: (previous, current) => current is SavedPlayersStateLoadSucceeded,
+      builder: (context, savedPlayersState) {
+        if (savedPlayersState is SavedPlayersStateLoadSucceeded) {
+          final isPlayerSaved = savedPlayersState.players.contains(player);
+          if (isPlayerSaved) {
+            return PlayerPackCardWidget(player: player);
+          }
+        }
+        return absentWIdget;
+      },
     );
   }
 }

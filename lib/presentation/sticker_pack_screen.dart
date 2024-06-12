@@ -1,6 +1,9 @@
 import 'dart:math' as math;
 
+import 'package:euro_collect_app/domain/models/player/player.dart';
+import 'package:euro_collect_app/main.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_image/network.dart';
 
 class StickerPackScreen extends StatefulWidget {
   const StickerPackScreen({super.key});
@@ -16,48 +19,50 @@ class StickerPackScreenState extends State<StickerPackScreen> with SingleTickerP
 
   bool _showCards = false;
 
-  final List<Widget> cardsList = [
-    Container(
-      width: 300,
-      height: 300,
-      decoration: BoxDecoration(
-        color: const Color.fromARGB(255, 28, 23, 23),
-        borderRadius: BorderRadius.circular(20),
-      ),
-    ),
-    Container(
-      width: 300,
-      height: 300,
-      decoration: BoxDecoration(
-        color: const Color.fromARGB(255, 144, 56, 56),
-        borderRadius: BorderRadius.circular(20),
-      ),
-    ),
-    Container(
-      width: 300,
-      height: 300,
-      decoration: BoxDecoration(
-        color: const Color.fromARGB(255, 26, 162, 135),
-        borderRadius: BorderRadius.circular(20),
-      ),
-    ),
-    Container(
-      width: 300,
-      height: 300,
-      decoration: BoxDecoration(
-        color: const Color.fromARGB(255, 1, 255, 1),
-        borderRadius: BorderRadius.circular(20),
-      ),
-    ),
-    Container(
-      width: 300,
-      height: 300,
-      decoration: BoxDecoration(
-        color: const Color.fromARGB(255, 222, 18, 130),
-        borderRadius: BorderRadius.circular(20),
-      ),
-    ),
-  ];
+  List<PlayerModel> packPlayers = [];
+  final List<Widget> packPlayerCards = [];
+  // [
+  //   Container(
+  //     width: 300,
+  //     height: 300,
+  //     decoration: BoxDecoration(
+  //       color: const Color.fromARGB(255, 28, 23, 23),
+  //       borderRadius: BorderRadius.circular(20),
+  //     ),
+  //   ),
+  //   Container(
+  //     width: 300,
+  //     height: 300,
+  //     decoration: BoxDecoration(
+  //       color: const Color.fromARGB(255, 144, 56, 56),
+  //       borderRadius: BorderRadius.circular(20),
+  //     ),
+  //   ),
+  //   Container(
+  //     width: 300,
+  //     height: 300,
+  //     decoration: BoxDecoration(
+  //       color: const Color.fromARGB(255, 26, 162, 135),
+  //       borderRadius: BorderRadius.circular(20),
+  //     ),
+  //   ),
+  //   Container(
+  //     width: 300,
+  //     height: 300,
+  //     decoration: BoxDecoration(
+  //       color: const Color.fromARGB(255, 1, 255, 1),
+  //       borderRadius: BorderRadius.circular(20),
+  //     ),
+  //   ),
+  //   Container(
+  //     width: 300,
+  //     height: 300,
+  //     decoration: BoxDecoration(
+  //       color: const Color.fromARGB(255, 222, 18, 130),
+  //       borderRadius: BorderRadius.circular(20),
+  //     ),
+  //   ),
+  // ];
 
   @override
   void initState() {
@@ -86,6 +91,12 @@ class StickerPackScreenState extends State<StickerPackScreen> with SingleTickerP
         curve: Curves.easeInOut,
       ),
     );
+
+    packPlayers = playersRepository.get5RandomPlayers();
+    for (var packPlayer in packPlayers) {
+      packPlayerCards.add(PlayerPackCardWidget(player: packPlayer));
+    }
+    setState(() {});
   }
 
   @override
@@ -102,7 +113,7 @@ class StickerPackScreenState extends State<StickerPackScreen> with SingleTickerP
   }
 
   void _removeCard(int i) {
-    cardsList.removeLast();
+    packPlayerCards.removeLast();
     setState(() {});
     if (i == 0) {
       _closePack();
@@ -123,7 +134,7 @@ class StickerPackScreenState extends State<StickerPackScreen> with SingleTickerP
       body: Stack(
         children: [
           if (_showCards)
-            for (int i = 0; i < cardsList.length; i++)
+            for (int i = 0; i < packPlayerCards.length; i++)
               AnimatedBuilder(
                 animation: _slideAnimation,
                 builder: (context, child) => Positioned(
@@ -131,12 +142,12 @@ class StickerPackScreenState extends State<StickerPackScreen> with SingleTickerP
                   left: 100,
                   top: 400 - _slideAnimation.value * 300,
                   child: Dismissible(
-                    key: Key(i.toString()),
+                    key: UniqueKey(),
                     onDismissed: (direction) {
-                      // playersRepository.savePlayer(players[i]);
+                      playersRepository.savePlayer(packPlayers[i]);
                       _removeCard(i);
                     },
-                    child: cardsList[i],
+                    child: packPlayerCards[i],
                   ),
                 ),
               ),
@@ -175,6 +186,184 @@ class StickerPackScreenState extends State<StickerPackScreen> with SingleTickerP
                   ],
                 ),
               ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class PlayerPackCardWidget extends StatelessWidget {
+  const PlayerPackCardWidget({
+    required this.player,
+    super.key,
+  });
+
+  final PlayerModel player;
+
+  String getCountryEmoji() {
+    switch (player.countryName) {
+      case "Германия":
+        return "🇩🇪";
+      case "Шотландия":
+        return "🏴󠁧󠁢󠁳󠁣󠁴󠁿";
+      case "Швейцария":
+        return "🇨🇭";
+      case "Венгрия":
+        return "🇭🇺";
+      case "Испания":
+        return "🇪🇸";
+      case "Италия":
+        return "🇮🇹";
+      case "Хорватия":
+        return "🇭🇷";
+      case "Албания":
+        return "🇦🇱";
+      case "Англия":
+        return "🏴󠁧󠁢󠁥󠁮󠁧󠁿";
+      case "Сербия":
+        return "🇷🇸";
+      case "Дания":
+        return "🇩🇰";
+      case "Словения":
+        return "🇸🇮";
+      case "Франция":
+        return "🇫🇷";
+      case "Нидерланды":
+        return "🇳🇱";
+      case "Австрия":
+        return "🇦🇹";
+      case "Польша":
+        return "🇵🇱";
+      case "Бельгия":
+        return "🇧🇪";
+      case "Румыния":
+        return "🇷🇴";
+      case "Словакия":
+        return "🇸🇰";
+      case "Украина":
+        return "🇺🇦";
+      case "Португалия":
+        return "🇵🇹";
+      case "Турция":
+        return "🇹🇷";
+      case "Чехия":
+        return "🇨🇿";
+      case "Грузия":
+        return "🇬🇪";
+      default:
+        return "";
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final mq = MediaQuery.of(context);
+    final imageUrl = player.photoUrl.contains("medium") ? player.photoUrl.replaceAll("medium", "big") : player.photoUrl;
+
+    return Container(
+      height: 300,
+      width: 200,
+      decoration: BoxDecoration(border: Border.all()),
+      child: Stack(
+        children: [
+          Positioned.fill(
+            bottom: 30,
+            child: Image(
+              image: NetworkImageWithRetry(imageUrl),
+              fit: BoxFit.cover,
+            ),
+          ),
+          Positioned(
+            top: 5,
+            left: 5,
+            child: Row(
+              children: [
+                Text(
+                  getCountryEmoji(),
+                  style: const TextStyle(fontSize: 20),
+                ),
+              ],
+            ),
+          ),
+          Positioned(
+            top: 5,
+            right: 5,
+            child: Row(
+              children: [
+                DecoratedBox(
+                  decoration: const BoxDecoration(
+                    image: DecorationImage(image: AssetImage("assets/shirt.png")),
+                  ),
+                  child: SizedBox(
+                    height: 32,
+                    width: 32,
+                    child: Center(
+                      child: Text(
+                        player.number.toString(),
+                        style: const TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Positioned(
+            bottom: 0,
+            right: 0,
+            left: 0,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(right: 5, bottom: 5),
+                  child: DecoratedBox(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      shape: BoxShape.circle,
+                      border: Border.all(),
+                    ),
+                    child: SizedBox(
+                      height: 32,
+                      width: 32,
+                      child: Center(
+                        child: Text(
+                          player.position,
+                          maxLines: 1,
+                          style: const TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                DecoratedBox(
+                  decoration: const BoxDecoration(
+                    color: Colors.white,
+                    border: BorderDirectional(top: BorderSide()),
+                  ),
+                  child: SizedBox(
+                    width: mq.size.width,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+                      child: Text(
+                        player.name,
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
         ],
