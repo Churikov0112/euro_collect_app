@@ -31,9 +31,9 @@ class PlayersRepository {
     return result;
   }
 
-  List<PlayerModel> get5RandomPlayers() {
+  List<PlayerModel> get10RandomPlayers() {
     final result = <PlayerModel>[];
-    while (result.length < 5) {
+    while (result.length < 10) {
       final player = _getRandomPlayer();
       if (!result.contains(player)) {
         result.add(player);

@@ -53,7 +53,7 @@ class StickerPackScreenState extends State<StickerPackScreen> with SingleTickerP
       ),
     );
 
-    packPlayers = playersRepository.get5RandomPlayers();
+    packPlayers = playersRepository.get10RandomPlayers();
     for (var packPlayer in packPlayers) {
       packPlayerCards.add(PlayerPackCardWidget(player: packPlayer));
     }
