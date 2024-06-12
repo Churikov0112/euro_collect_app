@@ -250,22 +250,23 @@ class StickerPackScreenState extends State<StickerPackScreen> with SingleTickerP
                       ),
                     ),
                     const SizedBox(height: 10),
-                    GestureDetector(
-                      onTap: () {
-                        if (_showCards == false) {
-                          _showRewardedAd();
-                        }
-                      },
-                      child: const Text(
-                        "Tap pack to open",
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w900,
-                          fontStyle: FontStyle.italic,
-                          fontSize: 32,
+                    if (!_showCards)
+                      GestureDetector(
+                        onTap: () {
+                          if (_showCards == false) {
+                            _showRewardedAd();
+                          }
+                        },
+                        child: const Text(
+                          "Tap pack to open",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w900,
+                            fontStyle: FontStyle.italic,
+                            fontSize: 32,
+                          ),
                         ),
                       ),
-                    ),
                   ],
                 ),
               ),
