@@ -1,6 +1,7 @@
 import 'package:euro_collect_app/presentation/blocs/all_players_bloc/all_players_bloc.dart';
 import 'package:euro_collect_app/presentation/blocs/saved_players_bloc/saved_players_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:yandex_mobileads/mobile_ads.dart';
@@ -31,6 +32,8 @@ class _MyAppState extends State<MyApp> {
     MobileAds.setUserConsent(true);
     MobileAds.setAgeRestrictedUser(true);
     MobileAds.initialize();
+
+    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   }
 
   @override

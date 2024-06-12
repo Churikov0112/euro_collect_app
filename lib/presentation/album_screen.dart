@@ -63,7 +63,18 @@ class _AlbumScreenState extends State<AlbumScreen> {
     // final mq = MediaQuery.of(context);
 
     return Scaffold(
-      appBar: AppBar(title: const Text("Album")),
+      appBar: AppBar(
+        title: const Text(
+          "Euro Pack Collection",
+          style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+            fontSize: 24,
+          ),
+        ),
+        backgroundColor: const Color.fromRGBO(43, 92, 255, 1),
+      ),
+      backgroundColor: const Color.fromRGBO(43, 92, 255, 1),
       // floatingActionButton: FloatingActionButton(
       //   onPressed: () {},
       //   child: const Icon(Icons.refresh),
@@ -87,7 +98,7 @@ class _AlbumScreenState extends State<AlbumScreen> {
                       crossAxisSpacing: 20,
                       mainAxisSpacing: 20,
                     ),
-                    padding: const EdgeInsets.all(20),
+                    padding: const EdgeInsets.only(top: 20, left: 20, right: 20, bottom: 120),
                     itemCount: allPlayersState.players.length,
                     itemBuilder: (context, index) {
                       return PlayerCard(
@@ -98,7 +109,7 @@ class _AlbumScreenState extends State<AlbumScreen> {
                 );
               }
               return const Center(
-                child: CircularProgressIndicator(),
+                child: CircularProgressIndicator(color: Colors.white),
               );
             },
           ),
@@ -132,8 +143,31 @@ class PlayerCard extends StatelessWidget {
         );
       },
       child: Container(
-        color: Colors.grey[400],
-        child: const Icon(Icons.question_mark, size: 40),
+        color: Colors.grey[300],
+        child: Padding(
+          padding: const EdgeInsets.all(10),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                player.name,
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              Text(
+                player.id.toString(),
+                style: const TextStyle(
+                  fontSize: 54,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black26,
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
 

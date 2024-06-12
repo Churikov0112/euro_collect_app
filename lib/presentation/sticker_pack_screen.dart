@@ -110,7 +110,7 @@ class StickerPackScreenState extends State<StickerPackScreen> with SingleTickerP
     final adLoader = await _adLoader;
     await adLoader.loadAd(
       adRequestConfiguration: const AdRequestConfiguration(
-        adUnitId: 'demo-rewarded-yandex', // 'R-M-9326097-3', // ,
+        adUnitId: 'R-M-9326097-3', // 'demo-rewarded-yandex',
       ),
     );
   }
@@ -144,6 +144,7 @@ class StickerPackScreenState extends State<StickerPackScreen> with SingleTickerP
   @override
   void dispose() {
     _controller.dispose();
+    _ad?.destroy();
     super.dispose();
   }
 
@@ -216,17 +217,23 @@ class StickerPackScreenState extends State<StickerPackScreen> with SingleTickerP
                         origin: const Offset(1.0, 1.0), // Правая нижняя точка
                         child: Container(
                           width: 200,
-                          height: 30,
-                          color: Colors.red,
+                          height: 10,
+                          color: const Color.fromRGBO(43, 92, 255, 1),
                         ),
                       ),
                     ),
                     GestureDetector(
                       onTap: _showCards ? _closePack : _showRewardedAd,
+                      onVerticalDragEnd: (details) {
+                        if (_showCards == false) {
+                          _showRewardedAd();
+                        }
+                      },
                       child: Container(
                         height: 300,
                         width: 200,
-                        color: Colors.green,
+                        color: const Color.fromRGBO(43, 92, 255, 1),
+                        child: Image.asset("assets/euro-2024-pix.jpg", fit: BoxFit.contain),
                       ),
                     ),
                   ],
