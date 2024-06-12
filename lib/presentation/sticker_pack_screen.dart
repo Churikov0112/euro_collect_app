@@ -187,16 +187,22 @@ class StickerPackScreenState extends State<StickerPackScreen> with SingleTickerP
               AnimatedBuilder(
                 animation: _slideAnimation,
                 builder: (context, child) => Positioned(
-                  right: 100,
-                  left: 100,
                   top: 400 - _slideAnimation.value * 300,
-                  child: Dismissible(
-                    key: UniqueKey(),
-                    onDismissed: (direction) {
-                      playersRepository.savePlayer(packPlayers[i]);
-                      _removeCard(i);
-                    },
-                    child: packPlayerCards[i],
+                  child: SizedBox(
+                    width: mq.size.width,
+                    child: Center(
+                      child: SizedBox(
+                        width: 200,
+                        child: Dismissible(
+                          key: UniqueKey(),
+                          onDismissed: (direction) {
+                            playersRepository.savePlayer(packPlayers[i]);
+                            _removeCard(i);
+                          },
+                          child: packPlayerCards[i],
+                        ),
+                      ),
+                    ),
                   ),
                 ),
               ),
