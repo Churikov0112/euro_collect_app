@@ -6,6 +6,7 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:yandex_mobileads/mobile_ads.dart';
 
+import 'player_card_widget.dart';
 import 'sticker_pack_screen.dart';
 
 class AlbumScreen extends StatefulWidget {
