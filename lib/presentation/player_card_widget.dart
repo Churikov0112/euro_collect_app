@@ -2,6 +2,61 @@ import 'package:euro_collect_app/domain/models/player/player.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_image/network.dart';
 
+String getCountryEmoji(PlayerModel player) {
+  switch (player.countryName) {
+    case "Германия":
+      return "🇩🇪";
+    case "Шотландия":
+      return "🏴󠁧󠁢󠁳󠁣󠁴󠁿";
+    case "Швейцария":
+      return "🇨🇭";
+    case "Венгрия":
+      return "🇭🇺";
+    case "Испания":
+      return "🇪🇸";
+    case "Италия":
+      return "🇮🇹";
+    case "Хорватия":
+      return "🇭🇷";
+    case "Албания":
+      return "🇦🇱";
+    case "Англия":
+      return "🏴󠁧󠁢󠁥󠁮󠁧󠁿";
+    case "Сербия":
+      return "🇷🇸";
+    case "Дания":
+      return "🇩🇰";
+    case "Словения":
+      return "🇸🇮";
+    case "Франция":
+      return "🇫🇷";
+    case "Нидерланды":
+      return "🇳🇱";
+    case "Австрия":
+      return "🇦🇹";
+    case "Польша":
+      return "🇵🇱";
+    case "Бельгия":
+      return "🇧🇪";
+    case "Румыния":
+      return "🇷🇴";
+    case "Словакия":
+      return "🇸🇰";
+    case "Украина":
+      return "🇺🇦";
+    case "Португалия":
+      return "🇵🇹";
+    case "Турция":
+      return "🇹🇷";
+    case "Чехия":
+      return "🇨🇿";
+    case "Грузия":
+      return "🇬🇪";
+    default:
+      return "";
+  }
+}
+
 class PlayerPackCardWidget extends StatelessWidget {
   const PlayerPackCardWidget({
     required this.player,
@@ -9,61 +64,6 @@ class PlayerPackCardWidget extends StatelessWidget {
   });
 
   final PlayerModel player;
-
-  String getCountryEmoji() {
-    switch (player.countryName) {
-      case "Германия":
-        return "🇩🇪";
-      case "Шотландия":
-        return "🏴󠁧󠁢󠁳󠁣󠁴󠁿";
-      case "Швейцария":
-        return "🇨🇭";
-      case "Венгрия":
-        return "🇭🇺";
-      case "Испания":
-        return "🇪🇸";
-      case "Италия":
-        return "🇮🇹";
-      case "Хорватия":
-        return "🇭🇷";
-      case "Албания":
-        return "🇦🇱";
-      case "Англия":
-        return "🏴󠁧󠁢󠁥󠁮󠁧󠁿";
-      case "Сербия":
-        return "🇷🇸";
-      case "Дания":
-        return "🇩🇰";
-      case "Словения":
-        return "🇸🇮";
-      case "Франция":
-        return "🇫🇷";
-      case "Нидерланды":
-        return "🇳🇱";
-      case "Австрия":
-        return "🇦🇹";
-      case "Польша":
-        return "🇵🇱";
-      case "Бельгия":
-        return "🇧🇪";
-      case "Румыния":
-        return "🇷🇴";
-      case "Словакия":
-        return "🇸🇰";
-      case "Украина":
-        return "🇺🇦";
-      case "Португалия":
-        return "🇵🇹";
-      case "Турция":
-        return "🇹🇷";
-      case "Чехия":
-        return "🇨🇿";
-      case "Грузия":
-        return "🇬🇪";
-      default:
-        return "";
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -100,7 +100,7 @@ class PlayerPackCardWidget extends StatelessWidget {
             child: Row(
               children: [
                 Text(
-                  getCountryEmoji(),
+                  getCountryEmoji(player),
                   style: const TextStyle(fontSize: 20),
                 ),
               ],

@@ -158,6 +158,14 @@ class PlayerCard extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                 ),
               ),
+              const SizedBox.shrink(),
+              Opacity(
+                opacity: 0.3,
+                child: Text(
+                  getCountryEmoji(player),
+                  style: const TextStyle(fontSize: 24),
+                ),
+              ),
               Text(
                 player.id.toString(),
                 style: const TextStyle(
