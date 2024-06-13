@@ -17,17 +17,20 @@ class PlayersRepository {
   }
 
   Future<void> savePlayer(PlayerModel player) async {
-    var box = await Hive.openBox<List<dynamic>>('saved_players');
+    var box = await Hive.openBox<List<int>>('saved_players_ids');
     savedPlayers.add(player);
     savedPlayers.toSet().toList();
-    box.put('players', savedPlayers.map((e) => e.toJson()).toList());
+    box.put('players', savedPlayers.map((e) => e.id).toList());
   }
 
   Future<List<PlayerModel>?> getSavedPlayers() async {
-    var box = await Hive.openBox<List<dynamic>>('saved_players');
+    var box = await Hive.openBox<List<int>>('saved_players_ids');
     final data = box.get('players', defaultValue: null);
-    final result = data?.map((e) => PlayerModel.fromJson(e)).toList();
-    savedPlayers.addAll(result ?? []);
+    final result = <PlayerModel>[];
+    for (final id in data ?? []) {
+      result.add(PlayerModel.fromJson(allPlayers.firstWhere((player) => player['id'] == id)));
+    }
+    savedPlayers.addAll(result);
     return result;
   }
 
