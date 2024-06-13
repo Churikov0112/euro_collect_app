@@ -74,6 +74,27 @@ class _AlbumScreenState extends State<AlbumScreen> {
           ),
         ),
         backgroundColor: const Color.fromRGBO(43, 92, 255, 1),
+        actions: [
+          IconButton(
+            onPressed: () {
+              Navigator.of(context)
+                  .push(
+                MaterialPageRoute<void>(
+                  builder: (BuildContext context) => const StickerPackScreen(),
+                ),
+              )
+                  .whenComplete(() {
+                print("update");
+                context.read<AllPlayersBloc>().add(AllPlayersEventLoad());
+                context.read<SavedPlayersBloc>().add(SavedPlayersEventLoad());
+              });
+            },
+            icon: const Icon(
+              Icons.add,
+              color: Colors.white,
+            ),
+          ),
+        ],
       ),
       backgroundColor: const Color.fromRGBO(43, 92, 255, 1),
       // floatingActionButton: FloatingActionButton(
