@@ -1,6 +1,6 @@
-final adConfig = _googlePlayAdConfig;
+// final adConfig = _googlePlayAdConfig;
 // final adConfig = _ruStoreAdConfig;
-// final adConfig = _appleAdConfig;
+final adConfig = _appleAdConfig;
 
 class _AdConfiguration {
   final String openPackAd;
