@@ -7,21 +7,21 @@ import 'package:yandex_mobileads/mobile_ads.dart';
 import '../ad_config.dart';
 import '../main.dart';
 
-class AutoclickerScreen extends StatefulWidget {
-  const AutoclickerScreen({super.key});
+class AutoclickerScreen1 extends StatefulWidget {
+  const AutoclickerScreen1({super.key});
 
   @override
-  AutoclickerScreenState createState() => AutoclickerScreenState();
+  AutoclickerScreen1State createState() => AutoclickerScreen1State();
 }
 
-class AutoclickerScreenState extends State<AutoclickerScreen> with SingleTickerProviderStateMixin {
+class AutoclickerScreen1State extends State<AutoclickerScreen1> with SingleTickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
     SchedulerBinding.instance.addPostFrameCallback((_) async {
       _loadAd();
-      _adLoader = _createRewardedAdLoader();
-      await _loadRewardedAd();
+      // _adLoader = _createRewardedAdLoader();
+      // await _loadRewardedAd();
     });
   }
 
