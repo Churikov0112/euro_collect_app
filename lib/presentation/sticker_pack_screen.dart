@@ -54,7 +54,7 @@ class StickerPackScreenState extends State<StickerPackScreen> with SingleTickerP
       ),
     );
 
-    packPlayers = playersRepository.get10RandomPlayers();
+    packPlayers = playersRepository.getRandomPlayers(5);
     for (var packPlayer in packPlayers) {
       packPlayerCards.add(PlayerPackCardWidget(player: packPlayer));
     }
@@ -138,9 +138,6 @@ class StickerPackScreenState extends State<StickerPackScreen> with SingleTickerP
     final reward = await _ad?.waitForDismiss();
     if (reward != null) {
       _openPack();
-      for (var item in packPlayers) {
-        await playersRepository.savePlayer(item);
-      }
     }
   }
 
@@ -153,7 +150,10 @@ class StickerPackScreenState extends State<StickerPackScreen> with SingleTickerP
     super.dispose();
   }
 
-  void _openPack() {
+  Future<void> _openPack() async {
+    for (var item in packPlayers) {
+      await playersRepository.savePlayer(item);
+    }
     setState(() {
       _showCards = true;
     });
@@ -237,10 +237,26 @@ class StickerPackScreenState extends State<StickerPackScreen> with SingleTickerP
                       ),
                     ),
                     GestureDetector(
-                      onTap: _showCards ? _closePack : _showRewardedAd,
+                      onTap: () {
+                        if (_showCards == false) {
+                          final randomDouble = math.Random().nextInt(6);
+                          final showAd = randomDouble > 3;
+                          if (showAd) {
+                            _showRewardedAd();
+                          } else {
+                            _openPack();
+                          }
+                        }
+                      },
                       onVerticalDragEnd: (details) {
                         if (_showCards == false) {
-                          _showRewardedAd();
+                          final randomDouble = math.Random().nextInt(6);
+                          final showAd = randomDouble > 3;
+                          if (showAd) {
+                            _showRewardedAd();
+                          } else {
+                            _openPack();
+                          }
                         }
                       },
                       child: Container(
@@ -255,7 +271,13 @@ class StickerPackScreenState extends State<StickerPackScreen> with SingleTickerP
                       GestureDetector(
                         onTap: () {
                           if (_showCards == false) {
-                            _showRewardedAd();
+                            final randomDouble = math.Random().nextInt(6);
+                            final showAd = randomDouble > 3;
+                            if (showAd) {
+                              _showRewardedAd();
+                            } else {
+                              _openPack();
+                            }
                           }
                         },
                         child: const Text(
@@ -276,6 +298,8 @@ class StickerPackScreenState extends State<StickerPackScreen> with SingleTickerP
           if (isBannerAlreadyCreated)
             Positioned(
               bottom: 0,
+              right: 0,
+              left: 0,
               child: AdWidget(bannerAd: banner),
             ),
         ],

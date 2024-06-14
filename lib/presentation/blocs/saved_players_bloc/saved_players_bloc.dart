@@ -22,9 +22,7 @@ class SavedPlayersBloc extends Bloc<SavedPlayersEvent, SavedPlayersState> {
     try {
       emit(SavedPlayersStatePending());
       final players = await repository.getSavedPlayers();
-      if (players != null) {
-        emit(SavedPlayersStateLoadSucceeded(players: players));
-      }
+      emit(SavedPlayersStateLoadSucceeded(players: players));
     } catch (e) {
       emit(SavedPlayersStateFailed(message: e.toString()));
     }
