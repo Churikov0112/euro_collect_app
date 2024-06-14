@@ -1,34 +1,51 @@
 import 'dart:math';
 
-import 'package:euro_collect_app/data/players_json.dart';
 import 'package:flutter/foundation.dart';
 import 'package:hive/hive.dart';
 
 import '../domain/models/player/player.dart';
+import 'players_json.dart';
 
 class PlayersRepository {
-  List<PlayerModel> savedPlayers = [];
+  List<PlayerModel> allPlayersCache = [];
+  List<PlayerModel> savedPlayersCache = [];
 
-  List<PlayerModel> getAllPlayers() {
-    return allPlayers.map((e) => PlayerModel.fromJson(e)).toList();
+  Future<List<PlayerModel>> getAllPlayers(bool fromRuntimeCache) async {
+    if (fromRuntimeCache) {
+      return allPlayersCache;
+    }
+
+    allPlayersCache = await compute<List<Map<String, Object>>, List<PlayerModel>>(
+      _parsePlayer,
+      allPlayers,
+    );
+    return allPlayersCache;
   }
 
-  Future<void> savePlayer(PlayerModel player) async {
+  List<PlayerModel> _parsePlayer(List<Map<String, Object>> data) {
+    return data.map((e) => PlayerModel.fromJson(e)).toList();
+  }
+
+  Future<void> savePlayers(List<PlayerModel> players) async {
     var box = await Hive.openBox<List<int>>('saved_players_ids');
-    savedPlayers.add(player);
-    savedPlayers.toSet().toList();
-    box.put('players', savedPlayers.map((e) => e.id).toList());
+    savedPlayersCache.addAll(players);
+    savedPlayersCache.toSet().toList();
+    box.put('players', savedPlayersCache.map((e) => e.id).toList());
   }
 
-  Future<List<PlayerModel>> getSavedPlayers() async {
+  Future<List<PlayerModel>> getSavedPlayers(bool fromRuntimeCache) async {
+    if (fromRuntimeCache) {
+      return savedPlayersCache;
+    }
+
     var box = await Hive.openBox<List<int>>('saved_players_ids');
     final data = box.get('players', defaultValue: null);
     final players = await compute<List<int>?, List<PlayerModel>>(
       _parseSavedPlayerIds,
       data,
     );
-    savedPlayers = players;
-    return savedPlayers;
+    savedPlayersCache = players;
+    return savedPlayersCache;
   }
 
   List<PlayerModel> _parseSavedPlayerIds(List<int>? ids) {

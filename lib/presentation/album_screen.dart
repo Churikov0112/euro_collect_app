@@ -58,6 +58,12 @@ class _AlbumScreenState extends State<AlbumScreen> {
     });
   }
 
+  _updatePage() {
+    print("update");
+    context.read<AllPlayersBloc>().add(AllPlayersEventLoad(fromRuntimeCache: true));
+    context.read<SavedPlayersBloc>().add(SavedPlayersEventLoad(fromRuntimeCache: true));
+  }
+
   // ! ads end ----------------------------------------------------------------
 
   @override
@@ -80,15 +86,11 @@ class _AlbumScreenState extends State<AlbumScreen> {
             onPressed: () {
               Navigator.of(context)
                   .push(
-                MaterialPageRoute<void>(
-                  builder: (BuildContext context) => const StickerPackScreen(),
-                ),
-              )
-                  .whenComplete(() {
-                print("update");
-                context.read<AllPlayersBloc>().add(AllPlayersEventLoad());
-                context.read<SavedPlayersBloc>().add(SavedPlayersEventLoad());
-              });
+                    MaterialPageRoute<void>(
+                      builder: (BuildContext context) => const StickerPackScreen(),
+                    ),
+                  )
+                  .whenComplete(_updatePage);
             },
             icon: const Icon(
               Icons.add,
@@ -172,8 +174,8 @@ class PlayerCard extends StatelessWidget {
         )
             .whenComplete(() {
           print("update");
-          context.read<AllPlayersBloc>().add(AllPlayersEventLoad());
-          context.read<SavedPlayersBloc>().add(SavedPlayersEventLoad());
+          context.read<AllPlayersBloc>().add(AllPlayersEventLoad(fromRuntimeCache: true));
+          context.read<SavedPlayersBloc>().add(SavedPlayersEventLoad(fromRuntimeCache: true));
         });
       },
       child: Container(

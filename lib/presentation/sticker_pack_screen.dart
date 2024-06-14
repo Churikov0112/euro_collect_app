@@ -151,9 +151,7 @@ class StickerPackScreenState extends State<StickerPackScreen> with SingleTickerP
   }
 
   Future<void> _openPack() async {
-    for (var item in packPlayers) {
-      await playersRepository.savePlayer(item);
-    }
+    playersRepository.savePlayers(packPlayers);
     setState(() {
       _showCards = true;
     });
