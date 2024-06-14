@@ -21,7 +21,7 @@ class SavedPlayersBloc extends Bloc<SavedPlayersEvent, SavedPlayersState> {
   Future<void> _load(SavedPlayersEventLoad event, Emitter emit) async {
     try {
       emit(SavedPlayersStatePending());
-      final players = await repository.getSavedPlayers();
+      final players = await repository.getSavedPlayers(event.fromRuntimeCache);
       emit(SavedPlayersStateLoadSucceeded(players: players));
     } catch (e) {
       emit(SavedPlayersStateFailed(message: e.toString()));
