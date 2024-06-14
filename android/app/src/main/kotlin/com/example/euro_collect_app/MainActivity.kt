@@ -1,4 +1,4 @@
-package com.example.euro_collect_app
+package com.nineone.euro_collect_app
 
 import io.flutter.embedding.android.FlutterActivity
 
