@@ -1,5 +1,5 @@
-final adConfig = _googlePlayAdConfig;
-// final adConfig = _ruStoreAdConfig;
+// final adConfig = _googlePlayAdConfig;
+final adConfig = _ruStoreAdConfig;
 // final adConfig = _appleAdConfig;
 
 class _AdConfiguration {
