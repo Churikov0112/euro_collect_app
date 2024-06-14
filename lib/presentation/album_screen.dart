@@ -104,41 +104,46 @@ class _AlbumScreenState extends State<AlbumScreen> {
       // ),
       body: Stack(
         children: [
-          BlocBuilder<AllPlayersBloc, AllPlayersState>(
-            builder: (context, allPlayersState) {
-              if (allPlayersState is AllPlayersStateLoadSucceeded) {
-                return RefreshIndicator(
-                  onRefresh: () async {
-                    Future.delayed(const Duration(milliseconds: 500)).whenComplete(() {
-                      context.read<AllPlayersBloc>().add(AllPlayersEventLoad());
-                      context.read<SavedPlayersBloc>().add(SavedPlayersEventLoad());
-                    });
-                  },
-                  child: GridView.builder(
-                    gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-                      maxCrossAxisExtent: 200,
-                      childAspectRatio: 2 / 3,
-                      crossAxisSpacing: 20,
-                      mainAxisSpacing: 20,
-                    ),
-                    padding: const EdgeInsets.only(top: 20, left: 20, right: 20, bottom: 120),
-                    itemCount: allPlayersState.players.length,
-                    itemBuilder: (context, index) {
-                      return PlayerCard(
-                        player: allPlayersState.players[index],
-                      );
+          BlocBuilder<SavedPlayersBloc, SavedPlayersState>(
+            builder: (context, savedPlayersState) => BlocBuilder<AllPlayersBloc, AllPlayersState>(
+              builder: (context, allPlayersState) {
+                if (allPlayersState is AllPlayersStateLoadSucceeded &&
+                    savedPlayersState is SavedPlayersStateLoadSucceeded) {
+                  return RefreshIndicator(
+                    onRefresh: () async {
+                      Future.delayed(const Duration(milliseconds: 500)).whenComplete(() {
+                        context.read<AllPlayersBloc>().add(AllPlayersEventLoad());
+                        context.read<SavedPlayersBloc>().add(SavedPlayersEventLoad());
+                      });
                     },
-                  ),
+                    child: GridView.builder(
+                      gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                        maxCrossAxisExtent: 200,
+                        childAspectRatio: 2 / 3,
+                        crossAxisSpacing: 20,
+                        mainAxisSpacing: 20,
+                      ),
+                      padding: const EdgeInsets.only(top: 20, left: 20, right: 20, bottom: 120),
+                      itemCount: allPlayersState.players.length,
+                      itemBuilder: (context, index) {
+                        return PlayerCard(
+                          player: allPlayersState.players[index],
+                        );
+                      },
+                    ),
+                  );
+                }
+                return const Center(
+                  child: CircularProgressIndicator(color: Colors.white),
                 );
-              }
-              return const Center(
-                child: CircularProgressIndicator(color: Colors.white),
-              );
-            },
+              },
+            ),
           ),
           if (isBannerAlreadyCreated)
             Positioned(
               bottom: 0,
+              right: 0,
+              left: 0,
               child: AdWidget(bannerAd: banner),
             ),
         ],
