@@ -1,3 +1,4 @@
+import 'package:euro_collect_app/ad_config.dart';
 import 'package:euro_collect_app/domain/models/player/player.dart';
 import 'package:euro_collect_app/presentation/blocs/all_players_bloc/all_players_bloc.dart';
 import 'package:euro_collect_app/presentation/blocs/saved_players_bloc/saved_players_bloc.dart';
@@ -38,7 +39,7 @@ class _AlbumScreenState extends State<AlbumScreen> {
 
   BannerAd _createBanner() {
     return BannerAd(
-      adUnitId: "R-M-9326097-1", // "demo-banner-yandex",
+      adUnitId: adConfig.albumBottomBanner, // "demo-banner-yandex",
       adSize: _getBannerAdSize(),
       adRequest: const AdRequest(),
       onAdLoaded: () {

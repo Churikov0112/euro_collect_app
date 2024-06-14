@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:yandex_mobileads/mobile_ads.dart';
 
+import '../ad_config.dart';
 import 'player_card_widget.dart';
 
 class StickerPackScreen extends StatefulWidget {
@@ -80,7 +81,7 @@ class StickerPackScreenState extends State<StickerPackScreen> with SingleTickerP
 
   BannerAd _createBanner() {
     return BannerAd(
-      adUnitId: "R-M-9326097-2", // "demo-banner-yandex",
+      adUnitId: adConfig.packBottomBanner, // "demo-banner-yandex",
       adSize: _getBannerAdSize(),
       adRequest: const AdRequest(),
       onAdLoaded: () {
@@ -110,8 +111,8 @@ class StickerPackScreenState extends State<StickerPackScreen> with SingleTickerP
   Future<void> _loadRewardedAd() async {
     final adLoader = await _adLoader;
     await adLoader.loadAd(
-      adRequestConfiguration: const AdRequestConfiguration(
-        adUnitId: 'R-M-9326097-3', // 'demo-rewarded-yandex',
+      adRequestConfiguration: AdRequestConfiguration(
+        adUnitId: adConfig.openPackAd, // 'demo-rewarded-yandex',
       ),
     );
   }
