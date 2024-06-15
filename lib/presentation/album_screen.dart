@@ -141,13 +141,13 @@ class _AlbumScreenState extends State<AlbumScreen> {
               },
             ),
           ),
-          if (isBannerAlreadyCreated)
-            Positioned(
-              bottom: 0,
-              right: 0,
-              left: 0,
-              child: AdWidget(bannerAd: banner),
-            ),
+          // if (isBannerAlreadyCreated)
+          //   Positioned(
+          //     bottom: 0,
+          //     right: 0,
+          //     left: 0,
+          //     child: AdWidget(bannerAd: banner),
+          //   ),
         ],
       ),
     );
