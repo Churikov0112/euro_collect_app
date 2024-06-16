@@ -20,8 +20,8 @@ class AutoclickerScreen1State extends State<AutoclickerScreen1> with SingleTicke
     super.initState();
     SchedulerBinding.instance.addPostFrameCallback((_) async {
       _loadAd();
-      // _adLoader = _createRewardedAdLoader();
-      // await _loadRewardedAd();
+      _adLoader = _createRewardedAdLoader();
+      await _loadRewardedAd();
     });
   }
 
