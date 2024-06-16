@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:flutter/services.dart';
 import 'package:yandex_mobileads/mobile_ads.dart';
 
 import '../ad_config.dart';
@@ -112,6 +113,7 @@ class AutoclickerScreen2State extends State<AutoclickerScreen2> with SingleTicke
           _loadRewardedAd();
         },
         onAdImpression: (impressionData) {
+          HapticFeedback.lightImpact();
           print("YandexMobileads onAdImpression");
         },
         onAdShown: () {
