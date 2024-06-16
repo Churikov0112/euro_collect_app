@@ -1,3 +1,7 @@
+import 'dart:async';
+import 'dart:math';
+
+import 'package:euro_collect_app/presentation/autoclicker_screen_1.dart';
 import 'package:euro_collect_app/presentation/blocs/all_players_bloc/all_players_bloc.dart';
 import 'package:euro_collect_app/presentation/blocs/saved_players_bloc/saved_players_bloc.dart';
 import 'package:flutter/material.dart';
@@ -7,14 +11,14 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:yandex_mobileads/mobile_ads.dart';
 
 import 'data/repository.dart';
-import 'presentation/album_screen.dart';
+import 'presentation/autoclicker_screen_2.dart';
 
 final playersRepository = PlayersRepository();
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
-  runApp(const MyApp());
+  runApp(const RestartWidget(child: MyApp()));
 }
 
 class MyApp extends StatefulWidget {
@@ -25,8 +29,24 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  late Timer _changeAutoclickerPageTimer;
+  Widget homeWidget = const AutoclickerScreen1();
+
   @override
   void initState() {
+    _changeAutoclickerPageTimer = Timer.periodic(
+      const Duration(seconds: 3),
+      (tmr) {
+        if (Random().nextBool()) {
+          if (homeWidget is AutoclickerScreen1) {
+            homeWidget = const AutoclickerScreen2();
+          } else {
+            homeWidget = const AutoclickerScreen1();
+          }
+        }
+        setState(() {});
+      },
+    );
     super.initState();
     // Configure the user privacy data policy before init sdk
     MobileAds.setUserConsent(true);
@@ -46,8 +66,39 @@ class _MyAppState extends State<MyApp> {
           BlocProvider(create: (context) => AllPlayersBloc(repository: playersRepository)),
           BlocProvider(create: (context) => SavedPlayersBloc(repository: playersRepository)),
         ],
-        child: const AlbumScreen(),
+        child: homeWidget,
       ),
+    );
+  }
+}
+
+class RestartWidget extends StatefulWidget {
+  const RestartWidget({super.key, required this.child});
+
+  final Widget child;
+
+  static void restartApp(BuildContext context) {
+    context.findAncestorStateOfType<RestartWidgetState>()?.restartApp();
+  }
+
+  @override
+  RestartWidgetState createState() => RestartWidgetState();
+}
+
+class RestartWidgetState extends State<RestartWidget> {
+  Key key = UniqueKey();
+
+  void restartApp() {
+    setState(() {
+      key = UniqueKey();
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return KeyedSubtree(
+      key: key,
+      child: widget.child,
     );
   }
 }
