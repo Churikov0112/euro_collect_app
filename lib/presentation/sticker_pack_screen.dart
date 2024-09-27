@@ -3,10 +3,7 @@ import 'dart:math' as math;
 import 'package:euro_collect_app/domain/models/player/player.dart';
 import 'package:euro_collect_app/main.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
-import 'package:yandex_mobileads/mobile_ads.dart';
 
-import '../ad_config.dart';
 import 'player_card_widget.dart';
 
 class StickerPackScreen extends StatefulWidget {
@@ -60,93 +57,93 @@ class StickerPackScreenState extends State<StickerPackScreen> with SingleTickerP
     }
     setState(() {});
 
-    SchedulerBinding.instance.addPostFrameCallback((_) async {
-      _loadAd();
-      _adLoader = _createRewardedAdLoader();
-      await _loadRewardedAd();
-    });
+    // SchedulerBinding.instance.addPostFrameCallback((_) async {
+    //   _loadAd();
+    //   _adLoader = _createRewardedAdLoader();
+    //   await _loadRewardedAd();
+    // });
   }
 
   // ! ads start ----------------------------------------------------------------
 
-  late BannerAd banner;
-  var isBannerAlreadyCreated = false;
-  late final Future<RewardedAdLoader> _adLoader;
-  RewardedAd? _ad;
+  // late BannerAd banner;
+  // var isBannerAlreadyCreated = false;
+  // late final Future<RewardedAdLoader> _adLoader;
+  // RewardedAd? _ad;
 
-  BannerAdSize _getBannerAdSize() {
-    final width = MediaQuery.of(context).size.width.round();
-    return BannerAdSize.sticky(width: width);
-  }
+  // BannerAdSize _getBannerAdSize() {
+  //   final width = MediaQuery.of(context).size.width.round();
+  //   return BannerAdSize.sticky(width: width);
+  // }
 
-  BannerAd _createBanner() {
-    return BannerAd(
-      adUnitId: adConfig.packBottomBanner, // "demo-banner-yandex",
-      adSize: _getBannerAdSize(),
-      adRequest: const AdRequest(),
-      onAdLoaded: () {
-        if (!mounted) {
-          banner.destroy();
-          return;
-        }
-      },
-    );
-  }
+  // BannerAd _createBanner() {
+  //   return BannerAd(
+  //     adUnitId: adConfig.packBottomBanner, // "demo-banner-yandex",
+  //     adSize: _getBannerAdSize(),
+  //     adRequest: const AdRequest(),
+  //     onAdLoaded: () {
+  //       if (!mounted) {
+  //         banner.destroy();
+  //         return;
+  //       }
+  //     },
+  //   );
+  // }
 
-  void _loadAd() async {
-    banner = _createBanner();
-    setState(() {
-      isBannerAlreadyCreated = true;
-    });
-  }
+  // void _loadAd() async {
+  //   banner = _createBanner();
+  //   setState(() {
+  //     isBannerAlreadyCreated = true;
+  //   });
+  // }
 
-  Future<RewardedAdLoader> _createRewardedAdLoader() {
-    return RewardedAdLoader.create(
-      onAdLoaded: (rewardedAd) {
-        _ad = rewardedAd;
-      },
-    );
-  }
+  // Future<RewardedAdLoader> _createRewardedAdLoader() {
+  //   return RewardedAdLoader.create(
+  //     onAdLoaded: (rewardedAd) {
+  //       _ad = rewardedAd;
+  //     },
+  //   );
+  // }
 
-  Future<void> _loadRewardedAd() async {
-    final adLoader = await _adLoader;
-    await adLoader.loadAd(
-      adRequestConfiguration: AdRequestConfiguration(
-        adUnitId: adConfig.openPackAd, // 'demo-rewarded-yandex',
-      ),
-    );
-  }
+  // Future<void> _loadRewardedAd() async {
+  //   final adLoader = await _adLoader;
+  //   await adLoader.loadAd(
+  //     adRequestConfiguration: AdRequestConfiguration(
+  //       adUnitId: adConfig.openPackAd, // 'demo-rewarded-yandex',
+  //     ),
+  //   );
+  // }
 
-  Future<void> _showRewardedAd() async {
-    _ad?.setAdEventListener(
-      eventListener: RewardedAdEventListener(
-        onAdFailedToShow: (error) {
-          _ad?.destroy();
-          _ad = null;
-          _loadRewardedAd();
-        },
-        onAdDismissed: () {
-          _ad?.destroy();
-          _ad = null;
-          _loadRewardedAd();
-        },
-        onRewarded: (reward) {},
-      ),
-    );
+  // Future<void> _showRewardedAd() async {
+  //   _ad?.setAdEventListener(
+  //     eventListener: RewardedAdEventListener(
+  //       onAdFailedToShow: (error) {
+  //         _ad?.destroy();
+  //         _ad = null;
+  //         _loadRewardedAd();
+  //       },
+  //       onAdDismissed: () {
+  //         _ad?.destroy();
+  //         _ad = null;
+  //         _loadRewardedAd();
+  //       },
+  //       onRewarded: (reward) {},
+  //     ),
+  //   );
 
-    await _ad?.show();
-    final reward = await _ad?.waitForDismiss();
-    if (reward != null) {
-      _openPack();
-    }
-  }
+  //   await _ad?.show();
+  //   final reward = await _ad?.waitForDismiss();
+  //   if (reward != null) {
+  //     _openPack();
+  //   }
+  // }
 
   // ! ads end ---------------------------------------------------------------
 
   @override
   void dispose() {
     _controller.dispose();
-    _ad?.destroy();
+    // _ad?.destroy();
     super.dispose();
   }
 
@@ -237,24 +234,12 @@ class StickerPackScreenState extends State<StickerPackScreen> with SingleTickerP
                     GestureDetector(
                       onTap: () {
                         if (_showCards == false) {
-                          final randomDouble = math.Random().nextInt(6);
-                          final showAd = randomDouble > 3;
-                          if (showAd) {
-                            _showRewardedAd();
-                          } else {
-                            _openPack();
-                          }
+                          _openPack();
                         }
                       },
                       onVerticalDragEnd: (details) {
                         if (_showCards == false) {
-                          final randomDouble = math.Random().nextInt(6);
-                          final showAd = randomDouble > 3;
-                          if (showAd) {
-                            _showRewardedAd();
-                          } else {
-                            _openPack();
-                          }
+                          _openPack();
                         }
                       },
                       child: Container(
@@ -269,13 +254,7 @@ class StickerPackScreenState extends State<StickerPackScreen> with SingleTickerP
                       GestureDetector(
                         onTap: () {
                           if (_showCards == false) {
-                            final randomDouble = math.Random().nextInt(6);
-                            final showAd = randomDouble > 3;
-                            if (showAd) {
-                              _showRewardedAd();
-                            } else {
-                              _openPack();
-                            }
+                            _openPack();
                           }
                         },
                         child: const Text(

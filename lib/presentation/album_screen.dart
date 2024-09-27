@@ -1,11 +1,8 @@
-import 'package:euro_collect_app/ad_config.dart';
 import 'package:euro_collect_app/domain/models/player/player.dart';
 import 'package:euro_collect_app/presentation/blocs/all_players_bloc/all_players_bloc.dart';
 import 'package:euro_collect_app/presentation/blocs/saved_players_bloc/saved_players_bloc.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:yandex_mobileads/mobile_ads.dart';
 
 import 'player_card_widget.dart';
 import 'sticker_pack_screen.dart';
@@ -22,41 +19,41 @@ class _AlbumScreenState extends State<AlbumScreen> {
   void initState() {
     context.read<AllPlayersBloc>().add(AllPlayersEventLoad());
     context.read<SavedPlayersBloc>().add(SavedPlayersEventLoad());
-    SchedulerBinding.instance.addPostFrameCallback((_) {
-      _loadAd();
-    });
+    // SchedulerBinding.instance.addPostFrameCallback((_) {
+    //   _loadAd();
+    // });
     super.initState();
   }
 
   // ! ads start ----------------------------------------------------------------
-  late BannerAd banner;
-  var isBannerAlreadyCreated = false;
+  // late BannerAd banner;
+  // var isBannerAlreadyCreated = false;
 
-  BannerAdSize _getBannerAdSize() {
-    final width = MediaQuery.of(context).size.width.round();
-    return BannerAdSize.sticky(width: width);
-  }
+  // BannerAdSize _getBannerAdSize() {
+  //   final width = MediaQuery.of(context).size.width.round();
+  //   return BannerAdSize.sticky(width: width);
+  // }
 
-  BannerAd _createBanner() {
-    return BannerAd(
-      adUnitId: adConfig.albumBottomBanner, // "demo-banner-yandex",
-      adSize: _getBannerAdSize(),
-      adRequest: const AdRequest(),
-      onAdLoaded: () {
-        if (!mounted) {
-          banner.destroy();
-          return;
-        }
-      },
-    );
-  }
+  // BannerAd _createBanner() {
+  //   return BannerAd(
+  //     adUnitId: adConfig.albumBottomBanner, // "demo-banner-yandex",
+  //     adSize: _getBannerAdSize(),
+  //     adRequest: const AdRequest(),
+  //     onAdLoaded: () {
+  //       if (!mounted) {
+  //         banner.destroy();
+  //         return;
+  //       }
+  //     },
+  //   );
+  // }
 
-  _loadAd() async {
-    banner = _createBanner();
-    setState(() {
-      isBannerAlreadyCreated = true;
-    });
-  }
+  // _loadAd() async {
+  //   banner = _createBanner();
+  //   setState(() {
+  //     isBannerAlreadyCreated = true;
+  //   });
+  // }
 
   _updatePage() {
     print("update");
